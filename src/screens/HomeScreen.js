@@ -1,12 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import Button from '../components/common/Button';
 import { Context } from '../context/BlogContext';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 
 const HomeScreen = ({ navigation }) => {
-    const { state, addBlogPost, deleteBlogPost } = useContext(Context);
+    const { state, getBlogPosts, deleteBlogPost } = useContext(Context);
+
+    useEffect(() => {
+        getBlogPosts();
+
+        const listener = navigation.addListener('didFocus', () => getBlogPosts());
+        return () => listener.remove();
+    }, [])
 
     return (
         <View>
@@ -51,13 +57,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#e7e4e4',
         borderBottomWidth: 1,
-        paddingVertical: 20
+        paddingVertical: 20,
+        alignItems: "center"
     },
     title: {
-        fontSize: 18
+        fontSize: 18,
+        paddingLeft: 10,
     },
     icon: {
-        fontSize: 24
+        fontSize: 24,
+        paddingRight: 10
     }
 
 });
